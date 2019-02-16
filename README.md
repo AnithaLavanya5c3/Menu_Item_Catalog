@@ -1,4 +1,4 @@
-# menu_item_catalog
+# Menu_Item_Catalog Project
 This project is about creating restaurant menu website which can allow us to add,edit,delete restaurants and its menu items.
 ### Before starting our project we need to download some softwares
 1. Virtual Box
