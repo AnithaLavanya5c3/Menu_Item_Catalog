@@ -11,7 +11,8 @@ import json
 from flask import make_response
 import requests
 from functools import wraps
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template
+from flask import request, redirect, jsonify, url_for, flash
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ APPLICATION_NAME = "Restaurant Menu Application"
 
 # Connect to Database and create database session
 engine = create_engine('sqlite:///restaurantmenuwithusers.db',
-                    connect_args={'check_same_thread':False})
+                       connect_args={'check_same_thread': False})
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -165,15 +166,15 @@ def getUserID(email):
     try:
         user = session.query(User).filter_by(email=email).one()
         return user.id
-    except:
-        return None
+    '''except:
+        return None'''
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
 
 
 @app.route('/gdisconnect')
 def gdisconnect():
-            # Only disconnect a connected user.
+    # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -244,7 +245,8 @@ def fbconnect():
     login_session['facebook_id'] = data["id"]
 
     # The token must be stored in the login_session in order to properly \
-    # logout, let's strip out the information before the equals sign in our token
+    ''' logout, let's strip out the information before the equals sign in
+    our token'''
     stored_token = token.split("=")[1]
     login_session['access_token'] = stored_token
 
@@ -398,7 +400,8 @@ def showMenu(restaurant_id):
     creator = getUserInfo(restaurant.user_id)
     items = session.query(MenuItem).filter_by(
         restaurant_id=restaurant_id).all()
-    if 'username' not in login_session or creator.id != login_session.get('user_id'):
+    if 'username' not in login_session or
+    creator.id != login_session.get('user_id'):
         return render_template('publicmenu.html', items=items,
                                restaurant=restaurant, creator=creator)
     else:
@@ -499,6 +502,7 @@ def disconnect():
     else:
         flash("You were not logged in")
         return redirect(url_for('showRestaurants'))
+
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
