@@ -163,13 +163,10 @@ def getUserInfo(user_id):
 
 
 def getUserID(email):
-    try:
-        user = session.query(User).filter_by(email=email).one()
-        return user.id
-    '''except:
-        return None'''
 
-# DISCONNECT - Revoke a current user's token and reset their login_session
+    user = session.query(User).filter_by(email=email).one()
+    return user.id
+    # DISCONNECT - Revoke a current user's token and reset their login_session
 
 
 @app.route('/gdisconnect')
@@ -400,8 +397,8 @@ def showMenu(restaurant_id):
     creator = getUserInfo(restaurant.user_id)
     items = session.query(MenuItem).filter_by(
         restaurant_id=restaurant_id).all()
-    if 'username' not in login_session or
-    creator.id != login_session.get('user_id'):
+    if 'username' not in login_session or creator.id !=\
+    login_session.get('user_id'):
         return render_template('publicmenu.html', items=items,
                                restaurant=restaurant, creator=creator)
     else:
